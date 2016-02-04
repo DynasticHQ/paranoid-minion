@@ -19,8 +19,20 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"dynastic.ninja/paranoid/minion"
+)
 
 func main() {
-	fmt.Println("Hello, minion")
+
+	config, err := minion.InitConfig("minion.toml")
+	if err != nil {
+		fmt.Println("Unable to load config file. Error:", err)
+		fmt.Println("Using minion defaults.")
+	}
+	minion.InitLogging(*config)
+
+	minion.Log.Info("Minion has started. Ready Up!")
 }
