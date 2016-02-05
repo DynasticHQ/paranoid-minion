@@ -29,6 +29,7 @@ type LogFields map[string]interface{}
 
 var Log *Logger
 
+// InitLogging initializes logging system used by the minion.
 func InitLogging(mc MinionConfig) {
 	Log = &Logger{logrus.New()}
 	Log.SetLogFormatter(mc.Log.Format)
@@ -38,6 +39,7 @@ func InitLogging(mc MinionConfig) {
 
 }
 
+// SetLogFormatter sets the format (JSON, text, etc) used by the logger.
 func (l *Logger) SetLogFormatter(format string) {
 	switch format {
 	case LogFormatJSON:
@@ -47,6 +49,7 @@ func (l *Logger) SetLogFormatter(format string) {
 	}
 }
 
+// SetLogLevel will set the log level (Info, Debug, etc).
 func (l *Logger) SetLogLevel(level string) {
 	switch level {
 	case LogLevelDebug:
