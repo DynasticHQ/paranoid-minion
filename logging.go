@@ -19,7 +19,11 @@
 
 package minion
 
-import "github.com/Sirupsen/logrus"
+import (
+	"strings"
+
+	"github.com/Sirupsen/logrus"
+)
 
 type Logger struct {
 	log *logrus.Logger
@@ -61,6 +65,24 @@ func (l *Logger) SetLogLevel(level string) {
 	default:
 		l.log.Level = logrus.InfoLevel
 	}
+}
+
+// Output is used as a helper method to integrate with Other lib's
+// logging system. Calldepth is ignored for now.
+func (l *Logger) Output(calldepth int, s string) error {
+
+	// Prefix being searched for is logging convention used by the go-nsq client
+	if strings.HasPrefix(s, "INF") {
+		l.Info(s)
+	} else if strings.HasPrefix(s, "DBG") {
+		l.Debug(s)
+	} else if strings.HasPrefix(s, "WRN") {
+		l.Warn(s)
+	} else if strings.HasPrefix(s, "ERR") {
+		l.Error(s)
+	}
+
+	return nil
 }
 
 // Debug logs a message at level Debug.
