@@ -23,7 +23,7 @@ package msgqueue
 type MessageQueue interface {
 	Initialize(host, queueName string) error
 	Connect() error
-	SetReceiveChannel(rc chan<- QueueData)
+	SetIncomingChannel(rc chan<- QueueData)
 	Shutdown()
 }
 

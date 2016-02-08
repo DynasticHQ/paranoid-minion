@@ -29,7 +29,7 @@ type NsqDriver struct {
 	Consumer        *nsq.Consumer
 	Host            string
 	MsgConverter    MessageConverter
-	ReceiverChannel chan<- QueueData
+	IncomingChannel chan<- QueueData
 }
 
 func (n *NsqDriver) Initialize(host, queueName string) (err error) {
@@ -60,8 +60,8 @@ func (n *NsqDriver) Connect() error {
 	return nil
 }
 
-func (n *NsqDriver) SetReceiveChannel(rc chan<- QueueData) {
-	n.ReceiverChannel = rc
+func (n *NsqDriver) SetIncomingChannel(rc chan<- QueueData) {
+	n.IncomingChannel = rc
 }
 
 func (n *NsqDriver) HandleMessage(message *nsq.Message) error {
@@ -72,7 +72,7 @@ func (n *NsqDriver) HandleMessage(message *nsq.Message) error {
 		return err
 	}
 
-	n.ReceiverChannel <- data
+	n.IncomingChannel <- data
 	return nil
 }
 
