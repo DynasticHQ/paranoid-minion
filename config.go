@@ -47,18 +47,19 @@ const (
 	LogTypeFile   = "file"
 )
 
-// InitConfig initalizes the MinionConfig by reading the path config.
-// Returns pointer to a MinionConfig if everything loads fine.
-// nil and an error otherwise.
-func InitConfig(path string) (*MinionConfig, error) {
+var Config MinionConfig
 
-	mc := NewConfig()
-	err := LoadConfigFile(path, &mc)
+// InitConfig initalizes the MinionConfig by reading the path config.
+// Returns an error if something went wrong.
+func InitConfig(path string) error {
+
+	Config := NewConfig()
+	err := LoadConfigFile(path, &Config)
 	if err != nil {
-		return &mc, err
+		return err
 	}
 
-	return &mc, nil
+	return nil
 }
 
 // LoadConfig takes a string path to load a TOML file and saves the data in mc.
