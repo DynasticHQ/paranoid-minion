@@ -17,7 +17,7 @@
  * along with The Paranoid Minion.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package messages
+package msgqueue
 
 import "gopkg.in/vmihailenco/msgpack.v2"
 

@@ -17,7 +17,7 @@
  * along with The Paranoid Minion.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package messages
+package msgqueue
 
 // MessageQueue is the interface expected for a message queue system.
 type MessageQueue interface {
