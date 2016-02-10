@@ -17,18 +17,23 @@
  * along with The Paranoid Minion.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package internal
+package internal_test
 
 import (
-	"fmt"
-	"runtime"
+	"testing"
+
+	"dynastic.ninja/paranoid/minion/internal"
 )
 
-const (
-	AppName       = "Paranoid Minion"
-	BinaryVersion = "0.0.1-alpha" // http://semver.org/
-)
+func TestVersionString(t *testing.T) {
 
-func VersionString() string {
-	return fmt.Sprintf("%s v%s (built w/%s)", AppName, BinaryVersion, runtime.Version())
+	expectedString := "Paranoid Minion v0.0.1-alpha (built w/go1.5.3)"
+	version := internal.VersionString()
+	if expectedString != version {
+		t.Error(
+			"Expected Version: ", expectedString,
+			"Got: ", version,
+		)
+	}
+
 }

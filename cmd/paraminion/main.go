@@ -43,7 +43,7 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Printf(version.String("Paranoid Minion"))
+		fmt.Printf(internal.VersionString())
 		return
 	}
 
