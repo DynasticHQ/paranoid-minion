@@ -31,8 +31,8 @@ func TestVersionString(t *testing.T) {
 	version := internal.VersionString()
 	if expectedString != version {
 		t.Error(
-			"Expected Version: ", expectedString,
-			"Got: ", version,
+			"Expected:", expectedString,
+			"Got:", version,
 		)
 	}
 
