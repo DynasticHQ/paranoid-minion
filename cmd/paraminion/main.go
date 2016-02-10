@@ -27,6 +27,7 @@ import (
 	"syscall"
 
 	"dynastic.ninja/paranoid/minion"
+	"dynastic.ninja/paranoid/minion/herder"
 	"dynastic.ninja/paranoid/minion/internal"
 	"dynastic.ninja/paranoid/minion/msgqueue"
 	"dynastic.ninja/paranoid/minion/transaction"
@@ -54,12 +55,11 @@ func main() {
 
 	minion.InitLogging(minion.Config)
 
-	incomingMsg := make(chan msgqueue.QueueData)
 	outgoingMsg := make(chan msgqueue.QueueData)
+	incomingMsg := make(chan msgqueue.QueueData)
 
-	supervisor := &transaction.Supervisor{}
-	supervisor.IncomingChannel = incomingMsg
-	supervisor.OutgoingChannel = outgoingMsg
+	supervisor := transaction.NewSupervisor(outgoingMsg, incomingMsg)
+	RegisterHerders(supervisor)
 
 	msgQueue := &msgqueue.NsqDriver{}
 	msgQueue.SetIncomingChannel(incomingMsg)
@@ -76,9 +76,14 @@ func main() {
 	for {
 		select {
 		case <-sigChan:
-			minion.Log.Info("Minion is stopping.")
 			msgQueue.Shutdown()
+			minion.Log.Info("Minion has stopped.")
 			return
 		}
 	}
+}
+
+func RegisterHerders(s *transaction.Supervisor) {
+	p := herder.Patcher{}
+	s.RegisterHerder(&p)
 }

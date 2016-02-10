@@ -19,23 +19,50 @@
 
 package transaction
 
-import (
-	"dynastic.ninja/paranoid/minion"
-	"dynastic.ninja/paranoid/minion/msgqueue"
-)
+import "dynastic.ninja/paranoid/minion/msgqueue"
 
 type Supervisor struct {
 	OutgoingChannel chan<- msgqueue.QueueData
 	IncomingChannel <-chan msgqueue.QueueData
+
+	Herders map[string]TransactionHerder
+}
+
+// NewSupervisor creates a transaction.Supervisor type
+func NewSupervisor(outgoing chan<- msgqueue.QueueData, incoming <-chan msgqueue.QueueData) *Supervisor {
+
+	s := &Supervisor{}
+	s.OutgoingChannel = outgoing
+	s.IncomingChannel = incoming
+	s.Herders = make(map[string]TransactionHerder)
+
+	return s
+}
+
+// RegisterHerder registers a herder with the Supervior.
+func (s *Supervisor) RegisterHerder(h TransactionHerder) {
+	s.Herders[h.Type()] = h
 }
 
 // Run starts the supervisor to manage and route transactions.
 // It's a blcoking call.
 func (s *Supervisor) Run() {
+
 	for {
-		select {
-		case data := <-s.IncomingChannel:
-			minion.Log.Info("Incoming data: ", data)
-		}
+
+		data := <-s.IncomingChannel
+		trans, _ := s.ToTransacton(data)
+
+		s.Herders[trans.Type].Run(trans, s)
 	}
+}
+
+// ToTransaction converts QueueData qd and returns a pointer to Transaction.
+// Return an error if unable to convert.
+func (s *Supervisor) ToTransacton(qd msgqueue.QueueData) (*Transaction, error) {
+
+	t := &Transaction{}
+	t.Type = qd["type"].(string)
+
+	return t, nil
 }

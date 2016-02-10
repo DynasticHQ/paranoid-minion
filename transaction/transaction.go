@@ -28,3 +28,10 @@ type Transaction struct {
 	Payload  PayloadData
 	Priority int
 }
+
+// TransactionHerder is a type that "herds" (handles) transactions
+// it cares about.
+type TransactionHerder interface {
+	Type() string
+	Run(t *Transaction, s *Supervisor)
+}
