@@ -19,6 +19,8 @@
 
 package transaction
 
+import "fmt"
+
 type PayloadData map[string]interface{}
 
 type Transaction struct {
@@ -29,8 +31,11 @@ type Transaction struct {
 	Priority int
 }
 
-// Herder is a type that "herds" (handles) transactions
-// it cares about.
+func (t *Transaction) String() string {
+	return fmt.Sprintf("Transaction Id: %s Type: %s Action: %s", t.Id, t.Type, t.Action)
+}
+
+// Herder is a type that "herds" (handles) transactions it cares about.
 type Herder interface {
 	Type() string
 	Run(t *Transaction, s *Supervisor)

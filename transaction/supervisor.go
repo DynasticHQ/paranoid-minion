@@ -70,7 +70,9 @@ func (s *Supervisor) Run() {
 func (s *Supervisor) ToTransacton(qd msgqueue.QueueData) (*Transaction, error) {
 
 	t := &Transaction{}
+	t.Id = qd["id"].(string)
 	t.Type = qd["type"].(string)
+	t.Action = qd["action"].(string)
 
 	return t, nil
 }

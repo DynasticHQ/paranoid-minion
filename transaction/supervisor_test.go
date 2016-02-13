@@ -21,7 +21,6 @@ package transaction_test
 
 import (
 	"os"
-	"reflect"
 	"testing"
 
 	"dynastic.ninja/paranoid/minion/msgqueue"
@@ -72,16 +71,23 @@ func TestSupervisorSetGet(t *testing.T) {
 
 func TestToTransaction(t *testing.T) {
 
+	id := "1234567"
+	action := "doit"
+
 	qd := msgqueue.QueueData{}
+	qd["id"] = id
 	qd["type"] = herder.Type()
+	qd["action"] = action
 
 	trans := &transaction.Transaction{}
 	trans.Type = herder.Type()
+	trans.Action = action
+	trans.Id = id
 
 	returned, _ := s.ToTransacton(qd)
-	if !reflect.DeepEqual(trans, returned) {
-		t.Error("Did not return the expected herder.",
-			"Expected:", trans,
+	if trans.String() != returned.String() {
+		t.Error("Did not return the expected herder.", "\n",
+			"Expected:", trans, "\n",
 			"Got:", returned,
 		)
 	}
