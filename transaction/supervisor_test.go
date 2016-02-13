@@ -21,6 +21,7 @@ package transaction_test
 
 import (
 	"os"
+	"reflect"
 	"testing"
 
 	"dynastic.ninja/paranoid/minion/msgqueue"
@@ -37,6 +38,8 @@ func (m MockHerder) Run(t *transaction.Transaction, s *transaction.Supervisor) {
 	return
 }
 
+var herder = MockHerder{}
+
 var outgoingChannel = make(chan<- msgqueue.QueueData)
 var incomingChannel = make(<-chan msgqueue.QueueData)
 var s *transaction.Supervisor
@@ -50,28 +53,11 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	s = &transaction.Supervisor{}
-	s.OutgoingChannel = outgoingChannel
-	s.IncomingChannel = incomingChannel
-}
-
-func TestNewSupervisor(t *testing.T) {
-	super := transaction.NewSupervisor(outgoingChannel, incomingChannel)
-
-	// TODO(miguelmoll): Not sure this is a useful way to check supervisor equality.
-	// Needs to be improved.
-	if super.OutgoingChannel != s.OutgoingChannel &&
-		super.IncomingChannel != s.IncomingChannel {
-		t.Error("Supervisors are not equal.",
-			"Expected:", s,
-			"Got:", super,
-		)
-	}
+	s = transaction.NewSupervisor(outgoingChannel, incomingChannel)
 }
 
 func TestSupervisorSetGet(t *testing.T) {
 
-	herder := MockHerder{}
 	s.RegisterHerder(herder)
 
 	returned := s.Herder(herder.Type())
@@ -80,6 +66,23 @@ func TestSupervisorSetGet(t *testing.T) {
 		t.Error("Did not return the expected herder.",
 			"Expected:", herder.Type(),
 			"Got:", returned.Type(),
+		)
+	}
+}
+
+func TestToTransaction(t *testing.T) {
+
+	qd := msgqueue.QueueData{}
+	qd["type"] = herder.Type()
+
+	trans := &transaction.Transaction{}
+	trans.Type = herder.Type()
+
+	returned, _ := s.ToTransacton(qd)
+	if !reflect.DeepEqual(trans, returned) {
+		t.Error("Did not return the expected herder.",
+			"Expected:", trans,
+			"Got:", returned,
 		)
 	}
 
