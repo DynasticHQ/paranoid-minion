@@ -25,7 +25,7 @@ type Supervisor struct {
 	OutgoingChannel chan<- msgqueue.QueueData
 	IncomingChannel <-chan msgqueue.QueueData
 
-	herders map[string]TransactionHerder
+	herders map[string]Herder
 }
 
 // NewSupervisor creates a transaction.Supervisor type
@@ -34,21 +34,21 @@ func NewSupervisor(outgoing chan<- msgqueue.QueueData, incoming <-chan msgqueue.
 	s := &Supervisor{}
 	s.OutgoingChannel = outgoing
 	s.IncomingChannel = incoming
-	s.herders = make(map[string]TransactionHerder)
+	s.herders = make(map[string]Herder)
 
 	return s
 }
 
 // RegisterHerder registers a herder with the Supervior.
-func (s *Supervisor) RegisterHerder(h TransactionHerder) {
+func (s *Supervisor) RegisterHerder(h Herder) {
 	if s.herders == nil {
-		s.herders = make(map[string]TransactionHerder)
+		s.herders = make(map[string]Herder)
 	}
 	s.herders[h.Type()] = h
 }
 
 // Herder returns the herderType specified
-func (s *Supervisor) Herder(herderType string) TransactionHerder {
+func (s *Supervisor) Herder(herderType string) Herder {
 	return s.herders[herderType]
 }
 

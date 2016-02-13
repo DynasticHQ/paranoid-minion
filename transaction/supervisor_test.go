@@ -85,5 +85,4 @@ func TestToTransaction(t *testing.T) {
 			"Got:", returned,
 		)
 	}
-
 }

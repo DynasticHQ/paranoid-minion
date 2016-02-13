@@ -29,9 +29,9 @@ type Transaction struct {
 	Priority int
 }
 
-// TransactionHerder is a type that "herds" (handles) transactions
+// Herder is a type that "herds" (handles) transactions
 // it cares about.
-type TransactionHerder interface {
+type Herder interface {
 	Type() string
 	Run(t *Transaction, s *Supervisor)
 }
