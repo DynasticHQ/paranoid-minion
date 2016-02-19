@@ -19,18 +19,19 @@
 
 package minion
 
-import "github.com/BurntSushi/toml"
+import (
+	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
+)
 
 // MinionConfig describes the config for the minion.
 type MinionConfig struct {
-	Log LogConfig
-}
-
-// Log describes the log group in a TOML format
-type LogConfig struct {
-	Level  string
-	Type   string
-	Format string
+	Log struct {
+		Level  string
+		Type   string
+		Format string
+	}
 }
 
 // MinionConfig constatns
@@ -53,7 +54,7 @@ var Config MinionConfig
 // Returns an error if something went wrong.
 func InitConfig(path string) error {
 
-	Config := NewConfig()
+	Config = NewConfig()
 	err := LoadConfigFile(path, &Config)
 	if err != nil {
 		return err
@@ -66,7 +67,12 @@ func InitConfig(path string) error {
 // It returns an error if something went wrong.
 func LoadConfigFile(path string, mc *MinionConfig) error {
 
-	_, err := toml.DecodeFile(path, mc)
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	err = yaml.Unmarshal(data, &mc)
 	if err != nil {
 		return err
 	}

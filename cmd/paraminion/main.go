@@ -34,7 +34,7 @@ import (
 )
 
 var (
-	configPath  = flag.String("config", "minion.toml", "TOML file used by the Minion.")
+	configPath  = flag.String("config", "minion.yaml", "TOML file used by the Minion.")
 	showVersion = flag.Bool("version", false, "print version string")
 )
 
