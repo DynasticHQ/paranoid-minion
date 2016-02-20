@@ -1,26 +1,26 @@
-/*
+/* Paranoid Minion
  * Copyright (C) 2016 Miguel Moll
  *
- * This file is part of the Paranoid Minion
- *
- * The Paranoid Minion is free software: you can redistribute it and/or modify
+ * This software is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The Paranoid Minion is distributed in the hope that it will be useful,
+ * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with The Paranoid Minion.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package msgqueue
 
 import (
-	"dynastic.ninja/paranoid/minion"
+	"strings"
+
+	"github.com/Sirupsen/logrus"
 	"github.com/nsqio/go-nsq"
 )
 
@@ -30,6 +30,8 @@ type NsqDriver struct {
 	Host            string
 	MsgConverter    MessageConverter
 	IncomingChannel chan<- QueueData
+
+	nsqLog *NsqLogger
 }
 
 func (n *NsqDriver) Initialize(host, queueName string) (err error) {
@@ -43,7 +45,8 @@ func (n *NsqDriver) Initialize(host, queueName string) (err error) {
 		return err
 	}
 
-	n.Consumer.SetLogger(minion.Log, nsq.LogLevelInfo)
+	n.nsqLog = &NsqLogger{logrus.StandardLogger()}
+	n.Consumer.SetLogger(n.nsqLog, nsq.LogLevelInfo)
 	n.Consumer.AddHandler(n)
 
 	return nil
@@ -53,7 +56,6 @@ func (n *NsqDriver) Connect() error {
 
 	err := n.Consumer.ConnectToNSQLookupd(n.Host)
 	if err != nil {
-		minion.Log.Info("Host:", n.Host)
 		return err
 	}
 
@@ -78,6 +80,28 @@ func (n *NsqDriver) HandleMessage(message *nsq.Message) error {
 
 func (n *NsqDriver) Shutdown() {
 	n.Consumer.Stop()
+}
+
+type NsqLogger struct {
+	*logrus.Logger
+}
+
+// Output is used as a helper method to integrate with nsq logging system.
+// Calldepth is ignored for now. This is a hack!!
+func (n *NsqLogger) Output(calldepth int, s string) error {
+
+	// Prefix being searched for is logging convention used by the go-nsq client
+	if strings.HasPrefix(s, "INF") {
+		n.Info(strings.TrimSpace(strings.Replace(s, "INF", "", 1)))
+	} else if strings.HasPrefix(s, "DBG") {
+		n.Debug(strings.TrimSpace(strings.Replace(s, "DBG", "", 1)))
+	} else if strings.HasPrefix(s, "WRN") {
+		n.Warn(strings.TrimSpace(strings.Replace(s, "WRN", "", 1)))
+	} else if strings.HasPrefix(s, "ERR") {
+		n.Error(strings.TrimSpace(strings.Replace(s, "ERR", "", 1)))
+	}
+
+	return nil
 }
 
 //func SendNSQ() {

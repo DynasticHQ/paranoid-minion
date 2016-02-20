@@ -1,21 +1,36 @@
+/* Paranoid Minion
+ * Copyright (C) 2016 Miguel Moll
+ *
+ * This software is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package herder
 
 import (
-	"dynastic.ninja/paranoid/minion"
 	"dynastic.ninja/paranoid/minion/transaction"
+	"github.com/Sirupsen/logrus"
 )
-
-var TYPE = "patcher"
 
 type Patcher struct {
 }
 
 func (p *Patcher) Type() string {
-	return TYPE
+	return "patcher"
 }
 
 func (p *Patcher) Run(t *transaction.Transaction, s *transaction.Supervisor) {
 
-	minion.Log.Info("In a herder run's method!!")
+	logrus.Info("In a herder run's method!!")
 
 }
