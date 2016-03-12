@@ -15,26 +15,30 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package transaction
+package main
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
 
-type PayloadData map[string]interface{}
+	"github.com/spf13/cobra"
+)
 
-type Transaction struct {
-	Id       string
-	Action   string
-	Type     string
-	Payload  PayloadData
-	Priority int
+const (
+	AppName       = "Paranoid Minion"
+	BinaryVersion = "0.0.1-alpha" // http://semver.org/
+)
+
+func VersionString(name, version string) string {
+	return fmt.Sprintf("%s v%s (built w/%s)", name, version, runtime.Version())
 }
 
-func (t *Transaction) String() string {
-	return fmt.Sprintf("Transaction Id: %s Type: %s Action: %s", t.Id, t.Type, t.Action)
-}
-
-// Herder is a type that "herds" (handles) transactions it cares about.
-type Herder interface {
-	Type() string
-	Run(t *Transaction, s *Supervisor)
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Print the minion's version",
+	Long:  `All software has versions. This is the minion's.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		fmt.Println(VersionString(cmd.Parent().Name(), BinaryVersion))
+		return nil
+	},
 }
