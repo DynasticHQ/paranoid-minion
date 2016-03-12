@@ -1,0 +1,76 @@
+hash: a304b40a6089afa68bd3c3eb49b43dae5064badbd895129b4a8ae9b84cb5057d
+updated: 2016-03-12T13:22:51.554229467-05:00
+imports:
+- name: github.com/BurntSushi/toml
+  version: bbd5bb678321a0d6e58f1099321dfa73391c1b6f
+- name: github.com/golang/protobuf
+  version: 0fd8c908d872c921af513ef5091964bbd2e0d904
+  subpackages:
+  - proto
+- name: github.com/hashicorp/hcl
+  version: 78101eb3cb45bc983bceeb78993f6a263406c54e
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/token
+  - json/parser
+  - hcl/scanner
+  - hcl/strconv
+  - json/scanner
+  - json/token
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/kr/pretty
+  version: e6ac2fc51e89a3249e82157fa0bb7a18ef9dd5bb
+- name: github.com/kr/text
+  version: bb797dc4fb8320488f47bf11de07a733d7233e1f
+- name: github.com/magiconair/properties
+  version: 497d0afefddf378f9ffb3c89db6a326985908519
+- name: github.com/mitchellh/mapstructure
+  version: d2dd0262208475919e1a362f675cfc0e7c10e905
+- name: github.com/mreiferson/go-snappystream
+  version: 028eae7ab5c4c9e2d1cb4c4ca1e53259bbe7e504
+  subpackages:
+  - snappy-go
+- name: github.com/nsqio/go-nsq
+  version: 0b80d6f05e15ca1930e0c5e1d540ed627e299980
+- name: github.com/Sirupsen/logrus
+  version: a26f43589d737684363ff856c5a0f9f24b946510
+- name: github.com/spf13/cast
+  version: ee7b3e0353166ab1f3a605294ac8cd2b77953778
+- name: github.com/spf13/cobra
+  version: 65a708cee0a4424f4e353d031ce440643e312f92
+- name: github.com/spf13/jwalterweatherman
+  version: 33c24e77fb80341fe7130ee7c594256ff08ccc46
+- name: github.com/spf13/pflag
+  version: 7f60f83a2c81bc3c3c0d5297f61ddfa68da9d3b7
+- name: github.com/spf13/viper
+  version: c975dc1b4eacf4ec7fdbf0873638de5d090ba323
+- name: golang.org/x/net
+  version: e7da8edaa52631091740908acaf2c2d4c9b3ce90
+  subpackages:
+  - context
+- name: golang.org/x/sys
+  version: 7a56174f0086b32866ebd746a794417edbc678a1
+  subpackages:
+  - unix
+- name: google.golang.org/appengine
+  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
+  subpackages:
+  - datastore
+  - internal
+  - internal/datastore
+  - internal/app_identity
+  - internal/modules
+  - internal/base
+  - internal/log
+  - internal/remote_api
+- name: gopkg.in/fsnotify.v1
+  version: 875cf421b32f8f1b31bd43776297876d01542279
+- name: gopkg.in/vmihailenco/msgpack.v2
+  version: 775d4b0cf44d799d42a1f6fded02252340f4e33d
+  subpackages:
+  - codes
+- name: gopkg.in/yaml.v2
+  version: a83829b6f1293c91addabc89d0571c246397bbf4
+devImports: []

@@ -1,0 +1,7 @@
+package: dynastic.ninja/paranoid/minion
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/nsqio/go-nsq
+- package: github.com/spf13/cobra
+- package: github.com/spf13/viper
+- package: gopkg.in/vmihailenco/msgpack.v2
