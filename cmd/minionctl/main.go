@@ -71,6 +71,7 @@ func main() {
 
 	minionCmd.AddCommand(versionCmd)
 	minionCmd.AddCommand(runCmd)
+	minionCmd.AddCommand(bootstrapCmd)
 
 	if err := minionCmd.Execute(); err != nil {
 		os.Exit(-1)
